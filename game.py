@@ -1,5 +1,7 @@
 from board import *
 from player import *
+import numpy as np
+import matplotlib.pyplot as plt
 
 def main():
 	t4t = T4Tplayer();
@@ -8,33 +10,105 @@ def main():
 	rp = Randomplayer();
 	hp = halfplayer();
 	shp = smartHalfPlayer();
+	rt4t = reversedT4Tplayer();
 
-	roundRobinGame([t4t,cp,dp,rp,hp,shp]);
+	# t4t2 = T4Tplayer();
+	# cp2  =	Cplayer();
+	# dp2  = Dplayer();
+	# rp2 = Randomplayer();
+	# hp2 = halfplayer();
+	# shp2 = smartHalfPlayer();
+
+	#t4t2,cp2,dp2,rp2,hp2,shp2
+	players = [cp,dp,t4t,rp,hp,shp,rt4t]
+	roundRobinGame(players)
+	for player in players:
+		print(player)
+
+	keys = list(set(players[0].logistics.keys()) | set(players[1].logistics.keys()))
+	data = [[]]
+	
+	xLabels = []
+	currIndex = 0
+
+	for key in keys:
+		for player in players:
+			if player.name not in xLabels:
+				xLabels.append(player.name);
+			if key == player.name:
+				data[currIndex].append(0);
+			else:
+				data[currIndex].append(player.logistics[key]['wins'])
+		data.append([]);
+		currIndex +=1
+
+	del data[-1]
+
+	print("keys: ",keys)
+	print("Data: ",data)
+	print("xLabels: ",xLabels)
+
+	N = len(players)
+
+	ind = np.arange(N)
+	width = .25
+
+	color = ['#0abab5',"#f4e8d9","#dfa855","#1e1e1e","#e70000","#965660",
+					 "#bd3b0c","#dae7c2","#fce3ed","#cd8c95","#baffc9"]
+
+	plots = []
+	count = 0
+	for index in range(len(data)):
+		npd = np.array(data[index])
+
+		tempList = data[:index]
+		bot = [sum(i) for i in zip(*tempList)]
+
+		if index != 0:
+			p = plt.bar(ind,npd,width,color = color[index],bottom=bot)
+		else:
+			p = plt.bar(ind,npd,width,color = color[index])
+		plots.append(p)
+		count+=1
+		
+	plt.ylabel("Wins")
+	plt.title("Wins per Strategy | Games("+ str(players[0].wins + players[0].losses + players[0].ties) + ")" )
+	plt.xticks(ind+.1,xLabels,rotation=90);
+	plt.legend(keys, loc='upper center', fancybox=True,ncol=2)
+	plt.gcf().subplots_adjust(bottom=0.20)
+
+	plt.savefig("Wins per Strategy")
+	plt.show()
+
+
 
 def roundRobinGame(listOfPlayers):
 	for p1Index in range(len(listOfPlayers)):
 		for p2Index in range(p1Index+1,len(listOfPlayers)):
 			listOfPlayers[p1Index].moves = []
 			listOfPlayers[p2Index].moves = []
-			simpleGame(listOfPlayers[p1Index],listOfPlayers[p2Index])
+			for x in range(1000):
+				simpleGame(listOfPlayers[p1Index],listOfPlayers[p2Index])
 
 	listOfPlayers.sort(key=lambda x: x.wins, reverse=True)
-	for x in listOfPlayers:
-		print(x)
+	# for x in listOfPlayers:
+	# 	print(x)
 
 def simpleGame(p1,p2):
-	iterations = 20000
+	iterations = 100
 	# print(p1.name + " vs. " + p2.name)
+	p1Score = 0
+	p2Score = 0
 
 	for x in range(iterations):
 		p1Move = p1.strategy(p2);
 		p2Move = p2.strategy(p1);
 
-		(p1Score,p2Score) = b1[p1Move+p2Move];
-		p1.addScore(p1Score);
-		p2.addScore(p2Score);
+		(p1S,p2S) = b1[p1Move+p2Move];
+		p1Score += p1S
+		p2Score += p2S
 
-		setRecords(p1,p2,p1Score,p2Score);
+	setRecords(p1,p2,p1Score,p2Score);
 
 def setRecords(p1,p2,p1Score,p2Score):
 	p1d = "",

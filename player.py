@@ -1,16 +1,14 @@
 import random
 
 class Player():
-	name = "User Input Strategy"
+	name = "User Input"
 
 	def __init__(self):
 		self.moves = [];
-		self.score = 0;
 		self.wins = 0;
 		self.losses = 0;
 		self.ties = 0;
 		self.logistics = {};
-
 
 	def strategy(self,opponent):
 		i = ""
@@ -18,9 +16,6 @@ class Player():
 			i = input("Enter C (cooperate) or D(defect)");
 		moves.append(i);
 		return i;
-
-	def addScore(self,score):
-		self.score += score;
 
 	def addMove(self,move):
 		self.moves.append(move)
@@ -44,8 +39,8 @@ class Player():
 
 	def __str__(self):
 		s = "-------------------\n"
-		s += self.name + " record\n" 
-		s += "Games played: " + str(self.wins + self.losses) + " Win Rate: "+ str(self.wins/(self.wins+self.losses+self.ties * 1.0)*100) +"\n"
+		s += self.name + " strategy record\n" 
+		s += "Games played: " + str(self.wins + self.losses + self.ties) + " Win Rate: "+ str(self.wins/(self.wins+self.losses+self.ties * 1.0)*100) +"\n"
 		s +="Won: " + str(self.wins) + "\t\tLost: " + str(self.losses) + "\t\tTied: "+ str(self.ties) + "\n\n"
 
 		for opponentName in self.logistics.keys():
@@ -61,7 +56,7 @@ class Player():
 class Cplayer(Player):
 	def __init__(self):
 		Player.__init__(self)
-		self.name = "Cooperative Strategy"
+		self.name = "Cooperative"
 
 	def strategy(self,opponent):
 		self.moves.append("C")
@@ -70,7 +65,7 @@ class Cplayer(Player):
 class Dplayer(Player):
 	def __init__(self):
 		Player.__init__(self)
-		self.name = "Defective Strategy"
+		self.name = "Defective"
 
 	def strategy(self,opponent):
 		self.moves.append("D");
@@ -79,12 +74,28 @@ class Dplayer(Player):
 class T4Tplayer(Player):
 	def __init__(self):
 		Player.__init__(self)
-		self.name = "Tit for Tat Strategy"
+		self.name = "Tit for Tat"
 
 	def strategy(self,opponent):
 		if len(self.moves) == 0:
 			self.moves.append("C");
 			return "C"
+		if opponent.moves[-1] == "D":
+			self.moves.append("D");
+			return "D"
+		else:
+			self.moves.append("C");
+			return "C"
+
+class reversedT4Tplayer(Player):
+	def __init__(self):
+		Player.__init__(self)
+		self.name = "reversed Tit for Tat"
+
+	def strategy(self,opponent):
+		if len(self.moves) == 0:
+			self.moves.append("D");
+			return "D"
 		if opponent.moves[-1] == "D":
 			self.moves.append("C");
 			return "C"
@@ -95,7 +106,7 @@ class T4Tplayer(Player):
 class Randomplayer(Player):
 	def __init__(self):
 		Player.__init__(self)
-		self.name = "Random Strategy"
+		self.name = "Random"
 
 	def strategy(self,opponent):
 		decision = ""
@@ -115,7 +126,7 @@ class Randomplayer(Player):
 class halfplayer(Player):
 	def __init__(self):
 		Player.__init__(self)
-		self.name = "Half and Half Strategy"
+		self.name = "Half and Half"
 
 	def strategy(self,opponent):
 		decision = ""
@@ -133,7 +144,7 @@ class halfplayer(Player):
 class smartHalfPlayer(Player):
 	def __init__(self):
 		Player.__init__(self)
-		self.name = "Read Opponent, 50 percent decision"
+		self.name = "Re Op and 50 per decision"
 
 	def strategy(self,opponent):
 		decision = ""
