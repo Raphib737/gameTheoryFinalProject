@@ -5,16 +5,26 @@ def main():
 	t4t = T4Tplayer();
 	cp  =	Cplayer();
 	dp  = Dplayer();
+	rp = Randomplayer();
+	hp = halfplayer();
+	shp = smartHalfPlayer();
 
-	p1 = t4t
-	p2 = dp
+	roundRobinGame([t4t,cp,dp,rp,hp,shp]);
 
-	simpleGame(p1,p2)
+def roundRobinGame(listOfPlayers):
+	for p1Index in range(len(listOfPlayers)):
+		for p2Index in range(p1Index+1,len(listOfPlayers)):
+			listOfPlayers[p1Index].moves = []
+			listOfPlayers[p2Index].moves = []
+			simpleGame(listOfPlayers[p1Index],listOfPlayers[p2Index])
 
+	listOfPlayers.sort(key=lambda x: x.wins, reverse=True)
+	for x in listOfPlayers:
+		print(x)
 
 def simpleGame(p1,p2):
-	iterations = 1
-	print(p1.name + " vs. " + p2.name)
+	iterations = 20000
+	# print(p1.name + " vs. " + p2.name)
 
 	for x in range(iterations):
 		p1Move = p1.strategy(p2);
@@ -40,8 +50,7 @@ def setRecords(p1,p2,p1Score,p2Score):
 		p1d = "T"
 		p2d = "T"
 
-	print(p2.name,p2.logistics)
-	p1.setRecord(p1d,"test")
-	print(p2.name,p2.logistics)
+	p1.setRecord(p1d,p2.name)
+	p2.setRecord(p2d,p1.name)
 
 main();

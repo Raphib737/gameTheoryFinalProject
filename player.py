@@ -1,18 +1,15 @@
-class Player:
-	name = "User Input Strategy"
-	score = 0;
-	moves = [];
-	wins = 0;
-	losses = 0;
-	ties = 0;
-	logistics = {};
+import random
 
-	def _init__(self):
+class Player():
+	name = "User Input Strategy"
+
+	def __init__(self):
 		self.moves = [];
 		self.score = 0;
 		self.wins = 0;
 		self.losses = 0;
 		self.ties = 0;
+		self.logistics = {};
 
 
 	def strategy(self,opponent):
@@ -48,13 +45,13 @@ class Player:
 	def __str__(self):
 		s = "-------------------\n"
 		s += self.name + " record\n" 
-		s += "Games played: " + str(self.wins + self.losses) + "\n"
+		s += "Games played: " + str(self.wins + self.losses) + " Win Rate: "+ str(self.wins/(self.wins+self.losses+self.ties * 1.0)*100) +"\n"
 		s +="Won: " + str(self.wins) + "\t\tLost: " + str(self.losses) + "\t\tTied: "+ str(self.ties) + "\n\n"
 
 		for opponentName in self.logistics.keys():
 			l = self.logistics[opponentName]
 			s += "against " + opponentName+ " : \n";
-			s += "\tGames Played: " + str(l['games']) + "  Win Rate: " + str(l["wins"] * 1.0/ l['games']) + "\n"
+			s += "\tGames Played: " + str(l['games']) + "  Win Rate: " + str(l["wins"] * 100.00/ l['games']) + "\n"
 			s += "\twins(" + str(l["wins"]) + ") losses(" + str(l['loss']) + ") ties(" + str(l['ties']) +")\n\n"
 		s += '-------------------\n'
 
@@ -62,26 +59,104 @@ class Player:
 
 
 class Cplayer(Player):
-	name = "Cooperative Strategy"
+	def __init__(self):
+		Player.__init__(self)
+		self.name = "Cooperative Strategy"
 
 	def strategy(self,opponent):
 		self.moves.append("C")
 		return "C"
 
 class Dplayer(Player):
-	name = "Defective Strategy"
+	def __init__(self):
+		Player.__init__(self)
+		self.name = "Defective Strategy"
+
 	def strategy(self,opponent):
 		self.moves.append("D");
 		return "D";
 
 class T4Tplayer(Player):
-	name = "Tit For Tat Strategy"
+	def __init__(self):
+		Player.__init__(self)
+		self.name = "Tit for Tat Strategy"
 
 	def strategy(self,opponent):
-		if len(self.moves) == 0 or opponent.moves[-1] == "D":
+		if len(self.moves) == 0:
 			self.moves.append("C");
 			return "C"
-		self.moves.append("D");
-		return "D"
+		if opponent.moves[-1] == "D":
+			self.moves.append("C");
+			return "C"
+		else:
+			self.moves.append("D");
+			return "D"
+
+class Randomplayer(Player):
+	def __init__(self):
+		Player.__init__(self)
+		self.name = "Random Strategy"
+
+	def strategy(self,opponent):
+		decision = ""
+		dec = random.randint(1,10000000);
+		dec = dec%2
+		if(dec % 2 == 1):
+			decision = "C";
+		else:
+			decision =  "D";
+
+		self.addMove(decision)
+		return decision
+
+
+
+
+class halfplayer(Player):
+	def __init__(self):
+		Player.__init__(self)
+		self.name = "Half and Half Strategy"
+
+	def strategy(self,opponent):
+		decision = ""
+		dec = random.randint(0,100);
+		if(dec >= 50):
+			decision = "C"
+		else:
+			decision = "D"
+
+		self.addMove(decision)
+		return decision
+
+
+
+class smartHalfPlayer(Player):
+	def __init__(self):
+		Player.__init__(self)
+		self.name = "Read Opponent, 50 percent decision"
+
+	def strategy(self,opponent):
+		decision = ""
+		dec = random.randint(0,100);
+		if(len(opponent.moves) == 0):
+			if(dec >= 50):
+				self.addMove("C")
+				return "C"
+			else:
+				self.addMove("D")
+				return "D"
+
+		oppMove = opponent.moves[-1];
+		if(dec >= 50):
+			decision = oppMove
+		else:
+			if(oppMove == "C"):
+				decision = "D"
+			else:
+				decision = "C"
+
+		self.addMove(decision)
+		return decision
+
 
 
