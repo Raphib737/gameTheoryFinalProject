@@ -48,7 +48,6 @@ class Player():
 			s += "against " + opponentName+ " : \n";
 			s += "\tGames Played: " + str(l['games']) + "  Win Rate: " + str(l["wins"] * 100.00/ l['games']) + "\n"
 			s += "\twins(" + str(l["wins"]) + ") losses(" + str(l['loss']) + ") ties(" + str(l['ties']) +")\n\n"
-		s += '-------------------\n'
 
 		return s
 
@@ -165,6 +164,34 @@ class smartHalfPlayer(Player):
 				decision = "D"
 			else:
 				decision = "C"
+
+		self.addMove(decision)
+		return decision
+
+class majorityPlayer(Player):
+	def __init__(self):
+		Player.__init__(self)
+		self.name = "majority"
+
+	def strategy(self,opponent):
+		decision = ""
+
+		if(len(opponent.moves) == 0):
+			decision = "C"
+			self.addMove(decision)
+			return decision
+
+		count = 0 
+		for move in opponent.moves:
+			if move == "C":
+				count += 1;
+			else:
+				count -= 1
+
+		if count >= 0:
+			decision = "C"
+		else:
+			decision = "D"
 
 		self.addMove(decision)
 		return decision

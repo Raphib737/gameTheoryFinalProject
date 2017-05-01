@@ -11,16 +11,10 @@ def main():
 	hp = halfplayer();
 	shp = smartHalfPlayer();
 	rt4t = reversedT4Tplayer();
-
-	# t4t2 = T4Tplayer();
-	# cp2  =	Cplayer();
-	# dp2  = Dplayer();
-	# rp2 = Randomplayer();
-	# hp2 = halfplayer();
-	# shp2 = smartHalfPlayer();
+	mp = majorityPlayer();
 
 	#t4t2,cp2,dp2,rp2,hp2,shp2
-	players = [cp,dp,t4t,rp,hp,shp,rt4t]
+	players = [cp,t4t,rp,hp,shp,rt4t,dp,mp]
 	roundRobinGame(players)
 	for player in players:
 		print(player)
@@ -43,10 +37,6 @@ def main():
 		currIndex +=1
 
 	del data[-1]
-
-	print("keys: ",keys)
-	print("Data: ",data)
-	print("xLabels: ",xLabels)
 
 	N = len(players)
 
@@ -87,7 +77,7 @@ def roundRobinGame(listOfPlayers):
 		for p2Index in range(p1Index+1,len(listOfPlayers)):
 			listOfPlayers[p1Index].moves = []
 			listOfPlayers[p2Index].moves = []
-			for x in range(1000):
+			for x in range(100):
 				simpleGame(listOfPlayers[p1Index],listOfPlayers[p2Index])
 
 	listOfPlayers.sort(key=lambda x: x.wins, reverse=True)
