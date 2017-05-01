@@ -25,8 +25,6 @@ def simpleGame(p1,p2):
 		p2.addScore(p2Score);
 
 		setRecords(p1,p2,p1Score,p2Score);
-		# print(p1)
-		# print(p2)
 
 def setRecords(p1,p2,p1Score,p2Score):
 	p1d = "",
@@ -42,8 +40,8 @@ def setRecords(p1,p2,p1Score,p2Score):
 		p1d = "T"
 		p2d = "T"
 
-	print(p2)
+	print(p2.name,p2.logistics)
 	p1.setRecord(p1d,"test")
-	print(p2)
+	print(p2.name,p2.logistics)
 
 main();

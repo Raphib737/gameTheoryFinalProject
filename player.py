@@ -13,7 +13,6 @@ class Player:
 		self.wins = 0;
 		self.losses = 0;
 		self.ties = 0;
-		self.logistics = {"wins":0,"loss":0,"ties":0,"games":0};
 
 
 	def strategy(self,opponent):
@@ -30,7 +29,6 @@ class Player:
 		self.moves.append(move)
 
 	def setRecord(self,decision,opponentName):
-		print(self)
 		if(opponentName not in self.logistics.keys()):
 			self.logistics[opponentName] = {"wins":0,"loss":0,"ties":0,"games":0}
 
@@ -45,7 +43,6 @@ class Player:
 			self.losses += 1;
 		self.logistics[opponentName]["games"] += 1
 
-		print(self)
 
 
 	def __str__(self):
