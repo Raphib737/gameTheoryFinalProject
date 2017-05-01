@@ -15,6 +15,7 @@ def main():
 
 	#t4t2,cp2,dp2,rp2,hp2,shp2
 	players = [cp,t4t,rp,hp,shp,rt4t,dp,mp]
+	#players = [dp,shp,rt4t,mp,t4t]
 	roundRobinGame(players)
 	for player in players:
 		print(player)
@@ -24,7 +25,13 @@ def main():
 	
 	xLabels = []
 	currIndex = 0
+	
+	yAxis = 'wins'
+	#yAxis = "ties"
+	#yAxis = 'loss'
 
+	
+	
 	for key in keys:
 		for player in players:
 			if player.name not in xLabels:
@@ -32,7 +39,7 @@ def main():
 			if key == player.name:
 				data[currIndex].append(0);
 			else:
-				data[currIndex].append(player.logistics[key]['wins'])
+				data[currIndex].append(player.logistics[key][yAxis])
 		data.append([]);
 		currIndex +=1
 
@@ -61,7 +68,7 @@ def main():
 		plots.append(p)
 		count+=1
 		
-	plt.ylabel("Wins")
+	plt.ylabel(yAxis)
 	plt.title("Wins per Strategy | Games("+ str(players[0].wins + players[0].losses + players[0].ties) + ")" )
 	plt.xticks(ind+.1,xLabels,rotation=90);
 	plt.legend(keys, loc='upper center', fancybox=True,ncol=2)
@@ -94,7 +101,7 @@ def simpleGame(p1,p2):
 		p1Move = p1.strategy(p2);
 		p2Move = p2.strategy(p1);
 
-		(p1S,p2S) = b1[p1Move+p2Move];
+		(p1S,p2S) = b2[p1Move+p2Move];
 		p1Score += p1S
 		p2Score += p2S
 
@@ -104,10 +111,10 @@ def setRecords(p1,p2,p1Score,p2Score):
 	p1d = "",
 	p2d = "";
 
-	if(p1Score < p2Score):
+	if(p1Score > p2Score):
 		p1d = "W"
 		p2d = "L"
-	elif(p2Score < p1Score):
+	elif(p2Score > p1Score):
 		p1d = "L"
 		p2d = "W"
 	else:
