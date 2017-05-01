@@ -85,7 +85,7 @@ def roundRobinGame(listOfPlayers):
 	# 	print(x)
 
 def simpleGame(p1,p2):
-	iterations = 100
+	iterations = 50
 	# print(p1.name + " vs. " + p2.name)
 	p1Score = 0
 	p2Score = 0
@@ -104,10 +104,10 @@ def setRecords(p1,p2,p1Score,p2Score):
 	p1d = "",
 	p2d = "";
 
-	if (p1Score > p2Score):
+	if(p1Score < p2Score):
 		p1d = "W"
 		p2d = "L"
-	elif(p2Score > p1Score):
+	elif(p2Score < p1Score):
 		p1d = "L"
 		p2d = "W"
 	else:
