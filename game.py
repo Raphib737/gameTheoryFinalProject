@@ -12,10 +12,10 @@ def main():
 	shp = smartHalfPlayer();
 	rt4t = reversedT4Tplayer();
 	mp = majorityPlayer();
+	minP = minorityPlayer();
 
-	#t4t2,cp2,dp2,rp2,hp2,shp2
-	players = [cp,t4t,rp,hp,shp,rt4t,dp,mp]
-	#players = [dp,shp,rt4t,mp,t4t]
+	players = [cp,t4t,rp,hp,shp,rt4t,dp,mp,minP]
+
 	roundRobinGame(players)
 	for player in players:
 		print(player)
@@ -26,9 +26,9 @@ def main():
 	xLabels = []
 	currIndex = 0
 	
-	yAxis = 'wins'
+	#yAxis = 'wins'
 	#yAxis = "ties"
-	#yAxis = 'loss'
+	yAxis = 'loss'
 
 	
 	
@@ -69,12 +69,12 @@ def main():
 		count+=1
 		
 	plt.ylabel(yAxis)
-	plt.title("Wins per Strategy | Games("+ str(players[0].wins + players[0].losses + players[0].ties) + ")" )
+	plt.title(yAxis + " per Strategy | Games("+ str(players[0].wins + players[0].losses + players[0].ties) + ")" )
 	plt.xticks(ind+.1,xLabels,rotation=90);
 	plt.legend(keys, loc='upper center', fancybox=True,ncol=2)
 	plt.gcf().subplots_adjust(bottom=0.20)
 
-	plt.savefig("Wins per Strategy")
+	plt.savefig(yAxis+ " per Strategy")
 	plt.show()
 
 
@@ -111,10 +111,10 @@ def setRecords(p1,p2,p1Score,p2Score):
 	p1d = "",
 	p2d = "";
 
-	if(p1Score > p2Score):
+	if(p1Score < p2Score):
 		p1d = "W"
 		p2d = "L"
-	elif(p2Score > p1Score):
+	elif(p2Score < p1Score):
 		p1d = "L"
 		p2d = "W"
 	else:

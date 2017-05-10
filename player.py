@@ -139,7 +139,6 @@ class halfplayer(Player):
 		return decision
 
 
-
 class smartHalfPlayer(Player):
 	def __init__(self):
 		Player.__init__(self)
@@ -196,5 +195,32 @@ class majorityPlayer(Player):
 		self.addMove(decision)
 		return decision
 
+class minorityPlayer(Player):
+	def __init__(self):
+		Player.__init__(self)
+		self.name = "minority"
+
+	def strategy(self,opponent):
+		decision = ""
+
+		if(len(opponent.moves) == 0):
+			decision = "C"
+			self.addMove(decision)
+			return decision
+
+		count = 0 
+		for move in opponent.moves:
+			if move == "C":
+				count += 1;
+			else:
+				count -= 1
+
+		if count >= 0:
+			decision = "D"
+		else:
+			decision = "C"
+
+		self.addMove(decision)
+		return decision
 
 
